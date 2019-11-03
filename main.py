@@ -30,7 +30,7 @@ def determine_date_of_folder(subdir):
 
 
 parser = argparse.ArgumentParser(description='Sort photos in a directory.')
-parser.add_argument('-d', '--directory')
+parser.add_argument('-d', '--directory', required=True)
 parser.add_argument('--dryrun', action='store_true')
 
 args = parser.parse_args()
