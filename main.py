@@ -37,9 +37,13 @@ args = parser.parse_args()
 
 renames = {}
 
+processedCount = 0
 for root, dirs, files in os.walk(args.directory, topdown=False):
     for name in files:
         try:
+            processedCount += 1
+            if (0 == (processedCount % 1000)):
+                print("Processed: ", processedCount, " Current file: ", name, file=sys.stderr)
             subsubdir, subdir = os.path.split(root)
             fullpath = os.path.join(root, name)
             folder_yyyy, folder_mm, folder_dd = determine_date_of_folder(subdir)
