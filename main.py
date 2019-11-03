@@ -21,7 +21,7 @@ def determine_date_of_image(infile):
         return datestring.split(" ")[0].split(":")[0:3]
 
 def determine_date_of_folder(subdir):
-    match = folder_re.match(subdir)
+    match = folder_re.fullmatch(subdir)
     if match:
         #print ("subdir: ", subdir, " groups: ", match.groups())
         return match.groups()
