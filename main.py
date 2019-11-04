@@ -70,5 +70,8 @@ for old, new in renames.items():
         print("rename: ", old, ", ", new)
     else:
         basedir, file = os.path.split(new)
-        os.makedirs(basedir, exist_ok=True)
-        os.rename(old, new)
+        try:
+            os.makedirs(basedir, exist_ok=True)
+            os.rename(old, new)
+        except OSError as ex:
+            print(ex)
