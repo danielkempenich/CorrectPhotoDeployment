@@ -12,7 +12,7 @@ def print_exif_tags(infile):
         print(infile, im.format, "%dx%d" % im.size, im.mode)
         info = im._getexif()
         for tagid, value in info.items():
-            print ("\t[", TAGS[tagid], "] = ", value)
+            print ("\t[", TAGS.get(tagid,"unknown"), "(", tagid, ") ] = ", value)
 
 
 
