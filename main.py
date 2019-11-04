@@ -9,6 +9,8 @@ from PIL import Image
 #from PIL.ExifTags import TAGS
 #print(TAGS[306])
 EXIF_TAG_DATETIME = 306
+EXIF_TAG_DATETIME_ORIGINAL = 36867
+EXIF_TAG_DATETIME_DIGITIZED = 36868
 
 folder_re = re.compile("(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)")
 
@@ -16,7 +18,11 @@ def determine_date_of_image(infile):
     with Image.open(infile) as im:
         #print(infile, im.format, "%dx%d" % im.size, im.mode)
         info = im._getexif()
-        datestring = (info[EXIF_TAG_DATETIME])
+        datestring = (info.get(EXIF_TAG_DATETIME_ORIGINAL))
+        if datestring is None:
+            datestring = (info.get(EXIF_TAG_DATETIME_DIGITIZED))
+        if datestring is None:
+            datestring = (info.get(EXIF_TAG_DATETIME))
         #print ("infile: ", infile, " datestring: ", datestring)
         return datestring.split(" ")[0].split(":")[0:3]
 
