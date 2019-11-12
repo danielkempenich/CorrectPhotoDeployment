@@ -39,6 +39,9 @@ renames = {}
 processedCount = 0
 for root, dirs, files in os.walk(args.directory, topdown=False):
     for name in files:
+        if (name[0:6] == 'FB_IMG'):
+            # These are not considered thumbnails
+            continue
         try:
             processedCount += 1
             if (0 == (processedCount % 1000)):
