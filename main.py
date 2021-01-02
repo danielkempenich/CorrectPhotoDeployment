@@ -5,6 +5,7 @@ import argparse
 import os
 import re
 from PIL import Image
+import hashlib
 
 #from PIL.ExifTags import TAGS
 #print(TAGS[306])
@@ -13,6 +14,18 @@ EXIF_TAG_DATETIME_ORIGINAL = 36867
 EXIF_TAG_DATETIME_DIGITIZED = 36868
 
 folder_re = re.compile("(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)")
+
+def sha256_of_file(infile):
+    sha256_hash = hashlib.sha256()
+    with open(infile, "rb") as thefile:
+        for byte_block in iter(lambda: thefile.read(4096), b""):
+            sha256_hash.update(byte_block)
+    return sha256_hash.hexdigest()
+
+def are_file_hashes_equal(file1, file2):
+    file1_hash = sha256_of_file(file1)
+    file2_hash = sha256_of_file(file2)
+    return (file1_hash == file2_hash)
 
 def determine_date_of_image(infile):
     with Image.open(infile) as im:
@@ -73,5 +86,10 @@ for old, new in renames.items():
         try:
             os.makedirs(basedir, exist_ok=True)
             os.rename(old, new)
+        except FileExistsError as ex:
+            if (are_file_hashes_equal(old, new)):
+                os.remove(old)
+            else:
+                print("Image with the same name differs in content: ", ex)
         except OSError as ex:
             print(ex)
